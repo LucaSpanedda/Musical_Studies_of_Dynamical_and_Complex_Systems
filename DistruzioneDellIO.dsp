@@ -172,17 +172,21 @@ sampler(memSec, reader, x) =
                     reader * memSec * ma.SR// external Reading index (0-1)
                 );
 
-chunkSampler(memSec, readFreq, trigCond, pulseWidth, x) = 
-     sampler(memSec, readOut, x) * (1-trigger)
+chunkSampler(memSec, readFreq, trigFreq, pulseWidth, seed, x) = 
+     sampler(memSec, readOut, x) * (trigger)
         with{
-            trigger = no.noise > trigCond; //PWSquare(trigFreq, 1-pulseWidth);
-            reader =  SplicePH(readFreq/memSec, 2, trigger);
+            trigger = PWSquare(trigFreq, 1-pulseWidth);
+            reader =  SplicePH(readFreq/memSec, seed, trigger);
             readOut = reader : _, !;
             trigOut = reader : !, _;
         };
 
+chunkGrains(voices, memSec, readFreq, trigFreq, pulseWidth, x)= 
+    par(i, voices, 
+            chunkSampler(memSec, readFreq, trigFreq, pulseWidth, i, x/voices)
+        ) :> (+,+);
+
 pwg = hslider("slide",0,0,1,.001);
 ftg = hslider("freq.",0,0,100,.001);
 
-MicIN(x,y) = x : integrator(.10), y : \(z,y).(chunkSampler(4, 1, 1-(z*.05), .001, y));
-process = _*10 : fi.dcblocker <: MicIN <: _,_;
+process = _ <: chunkGrains(8, 4, 1, 8, .1);
