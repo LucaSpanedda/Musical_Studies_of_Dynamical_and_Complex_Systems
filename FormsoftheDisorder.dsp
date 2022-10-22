@@ -24,7 +24,7 @@ datamoshosc(F,seed,G) = \(FB).  ( (F/ma.SR) * (1 - G) :
                                                 * (1 + (G * 2))
                                         )
                                 )~_ ;
-process =   (   walkNoise(1243) * 1000 @1000,
-                walkNoise(4397) * .5 @1000    ) : 
-                    \(x,z).(    datamoshosc(x,1122,z),
-                                datamoshosc(x,3211,z),(x,z) );
+process =   (   walkNoise(8213) * 1000 @1000,
+                walkNoise(8317) * .5 @1000    ) : 
+                    \(x,z).(    datamoshosc(x,6122,z),
+                                datamoshosc(x,2211,z)   );
