@@ -1,4 +1,4 @@
-//-------------------------------------------------- FORMS FROM THE DISORDER ---
+//---------------------------------------------------- FORMS OF THE DISORDER ---
 // Faust standard libraries
 import("stdfaust.lib");
 FQ = hslider("freq",1,1,10000,1);
